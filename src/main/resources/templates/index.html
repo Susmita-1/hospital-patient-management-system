@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Hospital Patient Management System</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            🏥
+            <span>Hospital PMS</span>
+        </div>
+
+        <nav>
+            <a href="/" class="active">🏠 Dashboard</a>
+            <a href="#">👤 Patients</a>
+            <a href="#">👨‍⚕️ Doctors</a>
+            <a href="#">📅 Appointments</a>
+            <a href="#">📋 Medical History</a>
+        </nav>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Header -->
+        <header class="header">
+
+            <div>
+                <h1>Dashboard</h1>
+                <p>Welcome to Hospital Patient Management System</p>
+            </div>
+
+            <div class="admin">
+                👤 Admin
+            </div>
+
+        </header>
+
+
+        <!-- Statistics -->
+        <section class="stats">
+
+            <div class="card">
+                <div class="icon">👥</div>
+                <div>
+                    <h3>120</h3>
+                    <p>Total Patients</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="icon">👨‍⚕️</div>
+                <div>
+                    <h3>15</h3>
+                    <p>Total Doctors</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="icon">📅</div>
+                <div>
+                    <h3>48</h3>
+                    <p>Appointments</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="icon">📋</div>
+                <div>
+                    <h3>350</h3>
+                    <p>Medical Records</p>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- Quick Actions -->
+        <section class="section">
+
+            <h2>Quick Actions</h2>
+
+            <div class="actions">
+
+                <button>➕ Add Patient</button>
+
+                <button>📅 Schedule Appointment</button>
+
+                <button>👨‍⚕️ View Doctors</button>
+
+                <button>📋 Medical Records</button>
+
+            </div>
+
+        </section>
+
+
+        <!-- Recent Patients -->
+        <section class="section">
+
+            <div class="section-header">
+                <h2>Recent Patients</h2>
+                <button class="view-button">View All</button>
+            </div>
+
+            <table>
+
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Patient Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Blood Group</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+
+                <tbody>
+
+                <tr>
+                    <td>P001</td>
+                    <td>Sita Sharma</td>
+                    <td>28</td>
+                    <td>Female</td>
+                    <td>O+</td>
+                    <td><span class="status">Active</span></td>
+                </tr>
+
+                <tr>
+                    <td>P002</td>
+                    <td>Ram Thapa</td>
+                    <td>35</td>
+                    <td>Male</td>
+                    <td>A+</td>
+                    <td><span class="status">Active</span></td>
+                </tr>
+
+                <tr>
+                    <td>P003</td>
+                    <td>Anita Rai</td>
+                    <td>42</td>
+                    <td>Female</td>
+                    <td>B+</td>
+                    <td><span class="status">Active</span></td>
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>
