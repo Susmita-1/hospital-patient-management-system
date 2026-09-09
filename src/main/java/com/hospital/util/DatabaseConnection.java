@@ -5,35 +5,19 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
-    private static volatile DatabaseConnection instance;
-    private Connection connection;
 
-    private DatabaseConnection() {
+    private static final String URL = "jdbc:mysql://localhost:3306/hospital_db?useSSL=false&serverTimezone=UTC";
+    private static final String USER = "root";
+    private static final String PASSWORD = "1@sushMEE";   // Update with your actual password
+
+    private DatabaseConnection() {}
+
+    public static Connection getConnection() throws SQLException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            // ⚠️ REPLACE with your actual MySQL credentials
-            this.connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/hospital_db?useSSL=false",
-                    "root",
-                    "1@sushMEE"
-            );
-        } catch (ClassNotFoundException | SQLException e) {
-            throw new RuntimeException("Failed to initialize database connection", e);
+        } catch (ClassNotFoundException e) {
+            throw new SQLException("MySQL Driver not found", e);
         }
-    }
-
-    public static DatabaseConnection getInstance() {
-        if (instance == null) {
-            synchronized (DatabaseConnection.class) {
-                if (instance == null) {
-                    instance = new DatabaseConnection();
-                }
-            }
-        }
-        return instance;
-    }
-
-    public Connection getConnection() {
-        return connection;
+        return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 }

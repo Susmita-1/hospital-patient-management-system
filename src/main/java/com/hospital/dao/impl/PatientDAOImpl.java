@@ -14,8 +14,8 @@ public class PatientDAOImpl implements PatientDAO {
     @Override
     public void save(Patient patient) throws DatabaseException {
         String sql = "INSERT INTO patients (first_name, last_name, date_of_birth, gender, phone, email, address, emergency_contact_name, emergency_contact_phone, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, patient.getFirstName());
             ps.setString(2, patient.getLastName());
             ps.setDate(3, Date.valueOf(patient.getDateOfBirth()));
@@ -27,15 +27,19 @@ public class PatientDAOImpl implements PatientDAO {
             ps.setString(9, patient.getEmergencyContactPhone());
             ps.setBoolean(10, patient.isActive());
             ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                patient.setId(rs.getLong(1));
+            }
         } catch (SQLException e) {
-            throw new DatabaseException("Failed to save patient", e);
+            throw new DatabaseException("Failed to save patient: " + e.getMessage(), e);
         }
     }
 
     @Override
     public Patient findById(Long id) throws PatientNotFoundException, DatabaseException {
         String sql = "SELECT * FROM patients WHERE id = ?";
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
@@ -45,22 +49,22 @@ public class PatientDAOImpl implements PatientDAO {
                 throw new PatientNotFoundException("Patient with ID " + id + " not found");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Failed to find patient", e);
+            throw new DatabaseException("Failed to find patient: " + e.getMessage(), e);
         }
     }
 
     @Override
     public List<Patient> findAll() throws DatabaseException {
         List<Patient> patients = new ArrayList<>();
-        String sql = "SELECT * FROM patients";
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+        String sql = "SELECT * FROM patients ORDER BY id";
+        try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 patients.add(mapRowToPatient(rs));
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Failed to retrieve patients", e);
+            throw new DatabaseException("Failed to retrieve patients: " + e.getMessage(), e);
         }
         return patients;
     }
@@ -68,7 +72,7 @@ public class PatientDAOImpl implements PatientDAO {
     @Override
     public void update(Patient patient) throws PatientNotFoundException, DatabaseException {
         String sql = "UPDATE patients SET first_name=?, last_name=?, date_of_birth=?, gender=?, phone=?, email=?, address=?, emergency_contact_name=?, emergency_contact_phone=?, active=? WHERE id=?";
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, patient.getFirstName());
             ps.setString(2, patient.getLastName());
@@ -86,14 +90,14 @@ public class PatientDAOImpl implements PatientDAO {
                 throw new PatientNotFoundException("Patient with ID " + patient.getId() + " not found");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Failed to update patient", e);
+            throw new DatabaseException("Failed to update patient: " + e.getMessage(), e);
         }
     }
 
     @Override
     public void delete(Long id) throws PatientNotFoundException, DatabaseException {
         String sql = "DELETE FROM patients WHERE id = ?";
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, id);
             int rows = ps.executeUpdate();
@@ -101,7 +105,7 @@ public class PatientDAOImpl implements PatientDAO {
                 throw new PatientNotFoundException("Patient with ID " + id + " not found");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Failed to delete patient", e);
+            throw new DatabaseException("Failed to delete patient: " + e.getMessage(), e);
         }
     }
 
